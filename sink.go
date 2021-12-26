@@ -127,3 +127,22 @@ func (c *Client) setDefaultSink(sinkName string) error {
 		stringTag, []byte(sinkName), byte(0))
 	return err
 }
+
+func (c *Client) SetSinkVolume(name string, volume float32) error {
+	return c.setSinkVolume(name, cvolume{uint32(volume * 0xffff)})
+}
+
+func (c *Client) setSinkVolume(name string, cvolume cvolume) error {
+	_, err := c.request(commandSetSinkVolume, uint32Tag, uint32(0xffffffff), stringTag, []byte(name), byte(0), cvolume)
+	return err
+}
+
+// ToggleMute reverse mute status
+func (c *Client) SetSinkMute(name string, b bool) error {
+	muteCmd := '0'
+	if b {
+		muteCmd = '1'
+	}
+	_, err := c.request(commandSetSinkMute, uint32Tag, uint32(0xffffffff), stringTag, []byte(name), byte(0), uint8(muteCmd))
+	return err
+}
