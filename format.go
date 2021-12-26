@@ -195,7 +195,7 @@ func bread(r io.Reader, data ...interface{}) error {
 					break
 				}
 				if t != stringTag {
-					return fmt.Errorf("Protcol error: Got type %s but expected %s", t, stringTag)
+					return fmt.Errorf("Protocol error: Got type %s but expected %s", t, stringTag)
 				}
 
 				var k, v string
