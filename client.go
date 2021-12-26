@@ -48,7 +48,7 @@ type Client struct {
 	conn        net.Conn
 	clientIndex int
 	packets     chan packet
-	updates     chan SubscriptionEventType
+	updates     chan Event
 	connected   bool
 }
 
@@ -70,7 +70,7 @@ func NewClient(addressArr ...string) (*Client, error) {
 	c := &Client{
 		conn:      conn,
 		packets:   make(chan packet),
-		updates:   make(chan SubscriptionEventType, 1),
+		updates:   make(chan Event, 1),
 		connected: true,
 	}
 
@@ -171,7 +171,7 @@ loop:
 				panic(err)
 			}
 			if rsp == commandSubscribeEvent && tag == 0xffffffff {
-				var event SubscriptionEventType
+				var event Event
 				var idx uint32 // ignored
 				err = bread(buff, uint32Tag, &event, uint32Tag, &idx)
 				if err != nil {
