@@ -69,6 +69,19 @@ func (c *Client) SourceOutputs() ([]SourceOutput, error) {
 	return sourceOutputs, nil
 }
 
+func (c *Client) GetSourceOutputInfo(index uint32) (*SourceOutput, error) {
+	b, err := c.request(commandGetSourceOutputInfo, uint32Tag, index)
+	if err != nil {
+		return nil, err
+	}
+	var sourceOutput SourceOutput
+	err = bread(b, &sourceOutput)
+	if err != nil {
+		return nil, err
+	}
+	return &sourceOutput, nil
+}
+
 func (c *Client) SetSourceOutputVolume(index uint32, volume float32) error {
 	return c.setSourceOutputVolume(index, cvolume{uint32(volume * 0xffff)})
 }

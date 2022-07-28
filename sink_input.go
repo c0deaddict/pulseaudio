@@ -69,6 +69,19 @@ func (c *Client) SinkInputs() ([]SinkInput, error) {
 	return sinkInputs, nil
 }
 
+func (c *Client) GetSinkInputInfo(index uint32) (*SinkInput, error) {
+	b, err := c.request(commandGetSinkInputInfo, uint32Tag, index)
+	if err != nil {
+		return nil, err
+	}
+	var sinkInput SinkInput
+	err = bread(b, &sinkInput)
+	if err != nil {
+		return nil, err
+	}
+	return &sinkInput, nil
+}
+
 func (c *Client) SetSinkInputVolume(index uint32, volume float32) error {
 	return c.setSinkInputVolume(index, cvolume{uint32(volume * 0xffff)})
 }

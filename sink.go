@@ -108,6 +108,19 @@ func (c *Client) Sinks() ([]Sink, error) {
 	return sinks, nil
 }
 
+func (c *Client) GetSinkInfo(index uint32) (*Sink, error) {
+	b, err := c.request(commandGetSinkInfo, uint32Tag, index, stringNullTag)
+	if err != nil {
+		return nil, err
+	}
+	var sink Sink
+	err = bread(b, &sink)
+	if err != nil {
+		return nil, err
+	}
+	return &sink, nil
+}
+
 type sinkPort struct {
 	Name, Description string
 	Pririty           uint32

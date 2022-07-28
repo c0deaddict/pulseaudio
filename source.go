@@ -110,6 +110,19 @@ func (c *Client) Sources() ([]Source, error) {
 	return sources, nil
 }
 
+func (c *Client) GetSourceInfo(index uint32) (*Source, error) {
+	b, err := c.request(commandGetSourceInfo, uint32Tag, index, stringNullTag)
+	if err != nil {
+		return nil, err
+	}
+	var source Source
+	err = bread(b, &source)
+	if err != nil {
+		return nil, err
+	}
+	return &source, nil
+}
+
 func (c *Client) SetSourceVolume(name string, volume float32) error {
 	return c.setSourceVolume(name, cvolume{uint32(volume * 0xffff)})
 }
