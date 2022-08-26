@@ -123,6 +123,12 @@ func (c *Client) GetSourceInfo(index uint32) (*Source, error) {
 	return &source, nil
 }
 
+func (c *Client) SetDefaultSource(name string) error {
+	_, err := c.request(commandSetDefaultSource,
+		stringTag, []byte(name), byte(0))
+	return err
+}
+
 func (c *Client) SetSourceVolume(name string, volume float32) error {
 	return c.setSourceVolume(name, cvolume{uint32(volume * 0xffff)})
 }
